@@ -1,12 +1,14 @@
 {
   "chats": [
     {
-      "server": "1096063929043669104",
-      "chat": "1324061868234637332"
+      "webno": "https://discord.com/api/webhooks/1324449289459466361/LwtG1QFI9J6OLLJ6rhRbeH6VQhnkJU87wXtRy7kUldhfsm2cwc0FWnwY-tazuvt6ay0O",
+      "server": "1089497578141388920",
+      "chat": "1278166796637048994"
     },
     {
-      "server": "1089497578141388920",
-      "chat": "1324067748392730655"
-    }
+      "webno": "https://discord.com/api/webhooks/1325513791441600654/MrYXM4XysNNM38dGw86DKvK24ZvHzgKn9BI9KNwT5comXXGO00z5V4FhNPYJK0SlZAwW",
+      "server": "1096063929043669104",
+      "chat": "1324449447018496051"
+    }	
   ]
 }
