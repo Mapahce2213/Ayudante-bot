@@ -1,4 +1,4 @@
-const { Client, SlashCommandBuilder, GUILD_SLASH_COMMANDS, Collection, Events, GatewayIntentBits, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ChannelType, IntentsBitField, REST, Routes, GUILD_EMOJIS_AND_STICKERS, ModalBuilder, TextInputStyle, TextInputBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
+const { Client, SlashCommandBuilder, GUILD_SLASH_COMMANDS, Collection, Events, GatewayIntentBits, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ChannelType, IntentsBitField, REST, Routes, GUILD_EMOJIS_AND_STICKERS, ModalBuilder, TextInputStyle, TextInputBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, WebhookClient } = require('discord.js');
 const client = require('../bot.js')
 const fs = require('fs');
 const path = require('path');
@@ -34,9 +34,7 @@ function serv() {
                 if (chata) { // Межсерверный чат
                 
                 if(message.content.includes('http')) {
-                
                 message.reply(`You can't paste here links!`)
-                
                 return;
                 } 
                 
@@ -49,19 +47,51 @@ function serv() {
 
                         let name = `${message.author.globalName} [${message.guild.name}]`;
                         let image = message.author.displayAvatarURL();
-
-                        let webno = await channel.createWebhook({
-                            name: name,
-                            avatar: image
+                        let webro = new WebhookClient({ url: dator.chats[i].webno})
+                        
+                         webro.edit({
+                         name: name,
+                         avatar: image
                         });
-
-                        await webno.send({
-                            content: message.content
-                        });
-
-                        setTimeout(() => {
-                            webno.delete();
-                        }, 2000);
+                      
+                      
+                      let attachments = message.attachments.map(attachment => attachment.url);
+                      
+                      
+             if(message.reference) {
+             let refera = await message.channel.messages.fetch(message.reference.messageId);
+             
+             if(refera) {
+             
+             const replya = new EmbedBuilder()
+				.setColor(0xffff03)
+				.setAuthor({ name: refera.member ? refera.member.displayName : refera.author, iconURL: refera.author.displayAvatarURL() })
+				.setDescription(refera.content)
+             
+             
+             
+           setTimeout(() => {
+           webro.send({
+           content: message.content,
+           embeds: [replya],
+           files: attachments
+          });
+           }, 1000);
+                            
+                            }                        
+                                     
+             } else {         
+                      
+                    setTimeout(() => {
+                        webro.send({ 
+                        content: message.content,
+                        files: attachments
+                        })
+                      }, 1000);
+             
+             }
+                        
+                        
                     }
                 }
             });
@@ -106,11 +136,21 @@ function serv() {
              return;
             }
             
-         datora.chats.push({
-           server: idguild,
-           chat: idchat
-        })  
+       
+       
+       let channel = client.client.channels.cache.get(idchat);
+       
+        let webno = await channel.createWebhook({
+                            name: "Global chat Ayudante"
+                        });
             
+            
+            
+         datora.chats.push({
+           webno: webno.url,
+           server: idguild,
+           chat: idchat,
+        })   
             
              fs.writeFile(filePata, JSON.stringify(datora, null, 2), (writeErr) => {
             if (writeErr) {
@@ -161,7 +201,22 @@ function serv() {
              return;
             }
             
-          datora.chats = datora.chats.filter(chat => !(chat.server === idguild && chat.chat === idchat));
+                                for (let i = 0; i < datora.chats.length; i++) {
+                    
+                    if (datora.chats[i].chat === inte.channelId) continue;
+                    
+                    
+                        let channel = client.client.channels.cache.get(datora.chats[i].chat);
+
+                        let webro = new WebhookClient({ url: datora.chats[i].webno})
+                        
+                         await webro.delete();
+                        }
+                        
+                        
+                        
+          datora.chats = datora.chats.filter(chat => !(chat.server === idguild && chat.chat === idchat && chat.webno));
+
             
             
              fs.writeFile(filePata, JSON.stringify(datora, null, 2), (writeErr) => {
