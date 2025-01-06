@@ -62,6 +62,10 @@ function serv() {
                       
 let attachments = message.attachments.map(attachment => attachment.url); 
 
+if (attachments.length > 2) {
+    message.reply("You can't only send up to 2 attachments!");
+    return;
+}
                       
              if(message.reference) {
              let refera = await message.channel.messages.fetch(message.reference.messageId);
