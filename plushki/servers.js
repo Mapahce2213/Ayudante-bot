@@ -100,7 +100,7 @@ if (attachments.length > 2) {
              
              }
       } catch(erra) {
-            if (error.code === 10015) {
+            if (erra.code === 10015) {
             
             dator.chats = dator.chats.filter(chat => !(chat.server === idguild && chat.chat === idchat && chat.webno === dator.chats[i].webno));
             
