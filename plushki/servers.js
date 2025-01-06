@@ -50,7 +50,7 @@ function serv() {
                         
                         
  webro.fetch()
-     .then(() => {                       
+     .then(async () => {                       
                  setTimeout(() => {
                         
                          webro.edit({
