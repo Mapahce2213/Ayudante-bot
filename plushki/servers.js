@@ -49,8 +49,8 @@ function serv() {
                         let webro = new WebhookClient({ url: dator.chats[i].webno})
                         
                         
- webro.fetch()
-     .then(async () => {                       
+
+     try {                       
                  setTimeout(() => {
                         
                          webro.edit({
@@ -95,7 +95,7 @@ let attachments = message.attachments.map(attachment => attachment.url);
                       }, 1000);
              
              }
-      }).catch(erra => {
+      } catch(erra) {
             if (error.code === 10015) {
             
             dator.chats = dator.chats.filter(chat => !(chat.server === idguild && chat.chat === idchat && chat.webno === dator.chats[i].webno));
@@ -104,7 +104,7 @@ let attachments = message.attachments.map(attachment => attachment.url);
             console.error(`Error fetching webhook: ${error}`);
             }
       
-      })                  
+      }                  
                         
                     }
                 }
