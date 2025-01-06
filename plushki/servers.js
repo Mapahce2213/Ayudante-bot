@@ -1,4 +1,4 @@
-const { Client, SlashCommandBuilder, GUILD_SLASH_COMMANDS, Collection, Events, GatewayIntentBits, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ChannelType, IntentsBitField, REST, Routes, GUILD_EMOJIS_AND_STICKERS, ModalBuilder, TextInputStyle, TextInputBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, WebhookClient } = require('discord.js');
+const { Client, SlashCommandBuilder, GUILD_SLASH_COMMANDS, Collection, Events, GatewayIntentBits, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ChannelType, IntentsBitField, REST, Routes, GUILD_EMOJIS_AND_STICKERS, ModalBuilder, TextInputStyle, TextInputBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, WebhookClient, MessageEmbed } = require('discord.js');
 const client = require('../bot.js')
 const fs = require('fs');
 const path = require('path');
@@ -11,7 +11,6 @@ const filePata = path.join(__dirname, './server.json');
 function serv() {
 
     client.client.on("messageCreate", async (message) => {
-        if (message.content !== '') {
             if (!message.guild) return;
             if (message.author.bot) return;
 
@@ -33,7 +32,7 @@ function serv() {
 
                 if (chata) { // Межсерверный чат
                 
-                if(message.content.includes('http')) {
+                if(message.content.includes('youtube') || message.content.includes('discord.gg')) {
                 message.reply(`You can't paste here links!`)
                 return;
                 } 
@@ -49,14 +48,20 @@ function serv() {
                         let image = message.author.displayAvatarURL();
                         let webro = new WebhookClient({ url: dator.chats[i].webno})
                         
+                        
+ webro.fetch()
+     .then(() => {                       
+                 setTimeout(() => {
+                        
                          webro.edit({
                          name: name,
                          avatar: image
                         });
+                 }, 750);
                       
                       
-                      let attachments = message.attachments.map(attachment => attachment.url);
-                      
+let attachments = message.attachments.map(attachment => attachment.url); 
+
                       
              if(message.reference) {
              let refera = await message.channel.messages.fetch(message.reference.messageId);
@@ -65,7 +70,7 @@ function serv() {
              
              const replya = new EmbedBuilder()
 				.setColor(0xffff03)
-				.setAuthor({ name: refera.member ? refera.member.displayName : refera.author, iconURL: refera.author.displayAvatarURL() })
+				.setAuthor({ name: refera.author.username, iconURL: refera.author.displayAvatarURL() })
 				.setDescription(refera.content)
              
              
@@ -90,12 +95,21 @@ function serv() {
                       }, 1000);
              
              }
-                        
+      }).catch(erra => {
+            if (error.code === 10015) {
+            
+            dator.chats = dator.chats.filter(chat => !(chat.server === idguild && chat.chat === idchat && chat.webno === dator.chats[i].webno));
+            
+            } else {
+            console.error(`Error fetching webhook: ${error}`);
+            }
+      
+      })                  
                         
                     }
                 }
             });
-        }
+
     });
     
     
